@@ -31,33 +31,6 @@ import datetime
 import pandas as pd
 
 
-#%% Krona template
-
-if "krona_template.xlsm" not in os.listdir():
-    print("Downloading Krona file")
-    Kronaurl="https://github.com/marbl/Krona/releases/download/xl2.5/Krona.xltm.zip"
-    urllib.request.urlretrieve(Kronaurl, "Krona.xltm.zip")
-    with zipfile.ZipFile("Krona.xltm.zip", 'r') as zip_ref:
-        print("Unzipping Krona file")
-        zip_ref.extractall()
-        
-            
-    wb = load_workbook('Krona.xltm', read_only=False,keep_vba=True)
-    wb.template = False
-    wb.save('Krona.xlsm')
-    
-    wb = load_workbook('Krona.xlsm', keep_vba=True)
-    ws=wb.active
-    for row in ws['A4:F19']:
-      for cell in row:
-        cell.value = ""
-    
-    ws['C3']=""
-    ws['D2']="lineage"
-    ws['B3']="frequency"
-    
-    wb.save('krona_template.xlsm')
-
 #%% KEGG KO file
 
 #download
@@ -113,4 +86,4 @@ for i in df.columns:
     df[i]=df[i].astype(str).str.strip()
 
 # save as pickle
-df.to_pickle(str(datetime.datetime.today()).split()[0]+"keg.pkl")
+df.to_csv(str(datetime.datetime.today()).split()[0]+"keg.tsv",sep="\t")
